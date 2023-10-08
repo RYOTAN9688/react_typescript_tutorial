@@ -23,7 +23,11 @@ export const ProjectList = ({ projects, onSave }: ProjectListProps) => {
       {projects.map((project) => (
         <div key={project.id} className="cols-sm">
           {project === projectBeingEdited ? (
-            <ProjectForm onSave={onSave} onCancel={cancelEditing} />
+            <ProjectForm
+              onSave={onSave}
+              onCancel={cancelEditing}
+              project={project}
+            />
           ) : (
             <ProjectCard project={project} onEdit={handleEdit} />
           )}
