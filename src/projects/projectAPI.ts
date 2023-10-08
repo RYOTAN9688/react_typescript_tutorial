@@ -50,16 +50,37 @@ const convertToProjectModels = (data: any[]): Project[] => {
 };
 
 export const projectAPI = {
-  get(page = 1, limit = 20) {
-    return fetch(`${url}?_page=${page}&_limit=${limit}&_sort=name`)
-      .then(checkStatus)
-      .then(parseJSON)
-      .then(convertToProjectModels)
-      .catch((error: TypeError) => {
-        console.log("log client error" + error);
-        throw new Error(
-          "There was an error retrieving the project. Please try again"
-        );
+  async get(page = 1, limit = 20) {
+    try {
+      const response = await fetch(
+        `${url}?_page=${page}&_limit=${limit}&_sort=name`
+      );
+      const response_1 = await checkStatus(response);
+      const data = await parseJSON(response_1);
+      return convertToProjectModels(data);
+    } catch (error) {
+      console.log("log client error" + error);
+      throw new Error(
+        "There was an error retrieving the project. Please try again"
+      );
+    }
+  },
+  async put(project: Project) {
+    try {
+      const response = await fetch(`${url}/${project.id}`, {
+        method: "PUT",
+        body: JSON.stringify(project),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+      const response_1 = await checkStatus(response);
+      return parseJSON(response_1);
+    } catch (error) {
+      console.log("log client error" + error);
+      throw new Error(
+        "There was an error retrieving the project. Please try again"
+      );
+    }
   },
 };
