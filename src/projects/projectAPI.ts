@@ -83,4 +83,10 @@ export const projectAPI = {
       );
     }
   },
+  async find(id: number) {
+    const response = await fetch(`${url}/${id}`);
+    const response_1 = await checkStatus(response);
+    const item = await parseJSON(response_1);
+    return convertToProjectModel(item);
+  },
 };
